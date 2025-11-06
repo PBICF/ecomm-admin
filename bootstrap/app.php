@@ -23,4 +23,13 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
         });
+
+        $exceptions->renderable(function (App\Exceptions\ApiException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'code' => $e->getCode(),
+                    'error' => $e->getMessage(),
+                ], $e->getCode() ?: 400);
+            }
+        });
     })->create();

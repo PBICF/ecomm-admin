@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Contracts\Providers\JWT;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -12,14 +15,23 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (! $token = Auth::guard('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $user = User::where('email', $credentials['email'])->first();
+        if (!$user) {
+            throw new \App\Exceptions\NotFoundException('User not found');
+        }
+
+        if (!$user->hasVerifiedEmail()) {
+            throw new \App\Exceptions\EmailNotVerifiedException();
+        }
+
+        if (! $token = JWTAuth::attempt($credentials)) {
+            throw new \App\Exceptions\UnauthorizedException('Invalid credentials');
         }
 
         return response()->json([
             'token_type' => 'bearer',
             'access_token' => $token,
-            'expires_in' => Auth::guard('api')->factory()->getTTL() * 60,
+            'expires_in' => JWTAuth::factory()->getTTL() * 60,
         ]);
     }
 
@@ -28,13 +40,18 @@ class AuthController extends Controller
         try {
             return response()->json([
                 'token_type' => 'bearer',
-                'access_token' => Auth::guard('api')->refresh(),
-                'expires_in' => Auth::guard('api')->factory()->getTTL() * 60,
+                'access_token' => JWTAuth::refresh(),
+                'expires_in' => JWTAuth::factory()->getTTL() * 60,
             ]);
 
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
             return response()->json(['error' => 'Invalid refresh token'], 401);
         }
+    }
+
+    public function register(Request $request)
+    {
+        //
     }
 
     public function me()
