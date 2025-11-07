@@ -39,6 +39,12 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            ->navigationGroups([
+                'Shop',
+                'Sales & Orders',
+                'Customers',
+                'Support & Operations'
+            ])
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,

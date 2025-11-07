@@ -20,6 +20,8 @@ class BrandForm
                 FileUpload::make('image')
                     ->image()
                     ->required(),
+                Toggle::make('is_popular')
+                    ->required(),
                 Toggle::make('is_active')
                     ->required(),
             ]);

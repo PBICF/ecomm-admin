@@ -2,6 +2,10 @@
 
 namespace App\Filament\Resources\Transactions\Schemas;
 
+use App\Enums\PaymentGateway;
+use App\Enums\PaymentMethod;
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -16,41 +20,24 @@ class TransactionForm
             ->components([
                 Select::make('order_id')
                     ->relationship('order', 'id')
-                    ->required(),
+                    ->default(null),
                 Select::make('user_id')
                     ->relationship('user', 'name')
-                    ->required(),
-                Select::make('parent_transaction_id')
-                    ->relationship('parentTransaction', 'id')
                     ->default(null),
                 TextInput::make('transaction_number')
                     ->required(),
                 TextInput::make('gateway_transaction_id')
                     ->default(null),
                 Select::make('payment_method')
-                    ->options([
-            'cod' => 'Cod',
-            'card' => 'Card',
-            'upi' => 'Upi',
-            'wallet' => 'Wallet',
-            'paypal' => 'Paypal',
-            'net_banking' => 'Net banking',
-        ])
+                    ->options(PaymentMethod::class)
                     ->default('cod')
                     ->required(),
                 Select::make('type')
-                    ->options(['payment' => 'Payment', 'refund' => 'Refund', 'partial_refund' => 'Partial refund'])
+                    ->options(TransactionType::class)
                     ->default('payment')
                     ->required(),
                 Select::make('status')
-                    ->options([
-            'pending' => 'Pending',
-            'processing' => 'Processing',
-            'success' => 'Success',
-            'failed' => 'Failed',
-            'cancelled' => 'Cancelled',
-            'refunded' => 'Refunded',
-        ])
+                    ->options(TransactionStatus::class)
                     ->default('pending')
                     ->required(),
                 TextInput::make('amount')
@@ -63,19 +50,9 @@ class TransactionForm
                     ->required()
                     ->numeric()
                     ->default(0.0),
-                TextInput::make('gateway')
-                    ->default(null),
-                Textarea::make('gateway_response')
-                    ->default(null)
-                    ->columnSpanFull(),
-                TextInput::make('card_last_four')
-                    ->default(null),
-                TextInput::make('card_brand')
-                    ->default(null),
-                TextInput::make('bank_name')
-                    ->default(null),
-                TextInput::make('ip_address')
-                    ->default(null),
+                Select::make('gateway')
+                    ->options(PaymentGateway::class)
+                    ->default('razorpay'),
                 Textarea::make('notes')
                     ->default(null)
                     ->columnSpanFull(),

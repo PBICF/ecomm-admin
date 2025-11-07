@@ -21,15 +21,6 @@ class OrderItem extends Model
         'total',
     ];
 
-    protected $casts = [
-        'price' => 'decimal:2',
-        'quantity' => 'integer',
-        'subtotal' => 'decimal:2',
-        'discount' => 'decimal:2',
-        'tax' => 'decimal:2',
-        'total' => 'decimal:2',
-    ];
-
     // Relationships
     public function order(): BelongsTo
     {
@@ -39,5 +30,17 @@ class OrderItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function casts(): array
+    {
+        return [
+            'price' => 'decimal:2',
+            'quantity' => 'integer',
+            'subtotal' => 'decimal:2',
+            'discount' => 'decimal:2',
+            'tax' => 'decimal:2',
+            'total' => 'decimal:2',
+        ];
     }
 }

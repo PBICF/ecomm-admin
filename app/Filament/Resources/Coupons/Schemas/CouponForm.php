@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Coupons\Schemas;
 
-use App\Enums\CouponTypeEnum;
+use App\Enums\CouponType;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -24,7 +24,7 @@ class CouponForm
                     ->default(null)
                     ->columnSpanFull(),
                 Select::make('type')
-                    ->options(CouponTypeEnum::class)
+                    ->options(CouponType::class)
                     ->default('fixed')
                     ->required(),
                 TextInput::make('value')

@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\ProductStatus;
+use App\Enums\ProductType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
-            $table->foreignId('brand_id')->constrained('brands')->cascadeOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
+            $table->foreignId('brand_id')->nullable()->constrained('brands')->nullOnDelete();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->enum('type', array_column(ProductType::cases(), 'value'))->default(ProductType::PHYSICAL);
 
             // Pricing
             $table->decimal('price', 10, 2);
@@ -33,9 +36,10 @@ return new class extends Migration
             $table->longText('description')->nullable();
 
             // Product status
-            $table->enum('status', ['draft', 'active', 'inactive'])->default('draft');
+            $table->enum('status', array_column(ProductStatus::cases(), 'value'))->default('draft');
             $table->boolean('is_featured')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

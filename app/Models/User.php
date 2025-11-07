@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\RoleEnum;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
@@ -73,7 +72,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'role' => RoleEnum::class,
+            'role' => \App\Enums\UserRole::class,
             'is_active' => 'boolean',
         ];
     }

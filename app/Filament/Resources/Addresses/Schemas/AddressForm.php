@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Addresses\Schemas;
 
-use App\Enums\AddressTypeEnum;
+use App\Enums\AddressType;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -18,7 +18,7 @@ class AddressForm
                     ->relationship('user', 'name')
                     ->required(),
                 Select::make('type')
-                    ->options(AddressTypeEnum::class)
+                    ->options(AddressType::class)
                     ->default('shipping')
                     ->required(),
                 TextInput::make('name')

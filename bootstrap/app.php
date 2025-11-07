@@ -29,9 +29,6 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($request->expectsJson() || $request->is('api/*')) {
                 return response()->json(['message' => 'Unauthenticated.'], 401);
             }
-
-            // Fallback for web routes (optional)
-            return redirect()->guest(route('login'));
         });
 
         $exceptions->renderable(function (MethodNotAllowedHttpException $e, Request $request) {

@@ -13,12 +13,17 @@ class CategoryForm
     {
         return $schema
             ->components([
+                TextInput::make('parent_id')
+                    ->numeric()
+                    ->default(null),
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('slug')
                     ->required(),
                 FileUpload::make('image')
                     ->image()
+                    ->required(),
+                Toggle::make('is_popular')
                     ->required(),
                 Toggle::make('is_active')
                     ->required(),

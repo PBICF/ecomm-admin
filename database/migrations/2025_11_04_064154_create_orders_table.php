@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\OrderStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,7 @@ return new class extends Migration
             $table->foreignId('address_id')->nullable()->constrained('addresses')->nullOnDelete();
             $table->string('order_number')->unique(); // e.g. ORD20251103XXXX
             $table->string('currency', 3)->default('INR');
-            $table->enum('status', ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'])->default('pending');
+            $table->enum('status', array_column(OrderStatus::cases(), 'value'))->default(OrderStatus::PENDING);
 
             // Financials
             $table->decimal('subtotal', 10, 2)->default(0);

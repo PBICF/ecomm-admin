@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
-use App\Enums\AddressTypeEnum;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Address extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -51,7 +50,7 @@ class Address extends Model
     protected function casts(): array
     {
         return [
-            'type'       => AddressTypeEnum::class,
+            'type'       => \App\Enums\AddressType::class,
             'is_default' => 'boolean',
         ];
     }
