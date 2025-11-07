@@ -5,7 +5,11 @@ namespace App\Filament\Resources\Orders\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class OrdersTable
@@ -48,15 +52,20 @@ class OrdersTable
                 TextColumn::make('coupon_value')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('payment_method'),
-                TextColumn::make('payment_status'),
-                TextColumn::make('transaction_id')
-                    ->searchable(),
                 TextColumn::make('tracking_number')
                     ->searchable(),
                 TextColumn::make('carrier')
                     ->searchable(),
+                TextColumn::make('shipped_at')
+                    ->dateTime()
+                    ->sortable(),
+                TextColumn::make('delivered_at')
+                    ->dateTime()
+                    ->sortable(),
                 TextColumn::make('ordered_at')
+                    ->dateTime()
+                    ->sortable(),
+                TextColumn::make('cancelled_at')
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('created_at')
@@ -67,16 +76,23 @@ class OrdersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                 ]),
             ]);
     }

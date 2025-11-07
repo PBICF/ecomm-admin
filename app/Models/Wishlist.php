@@ -15,11 +15,6 @@ class Wishlist extends Model
         'product_id',
     ];
 
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
-
     // Relationships
     public function user(): BelongsTo
     {
@@ -76,5 +71,13 @@ class Wishlist extends Model
         ]);
 
         return true; // Added to wishlist
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
     }
 }

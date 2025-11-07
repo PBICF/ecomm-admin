@@ -8,6 +8,7 @@ use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -16,9 +17,19 @@ use Filament\Tables\Table;
 
 class UserResource extends Resource
 {
+    protected static ?int $navigationSort = 30;
+
     protected static ?string $model = User::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
+    protected static ?string $modelLabel = 'customer';
+
+    protected static ?string $navigationLabel = 'Customers';
+
+    protected static ?string $pluralModelLabel = 'Customers';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserCircle;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Customers';
 
     public static function form(Schema $schema): Schema
     {

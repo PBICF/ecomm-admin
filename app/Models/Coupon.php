@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Enums\CouponTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Coupon extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -46,12 +46,12 @@ class Coupon extends Model
     protected function casts(): array
     {
         return [
-            'type' => CouponTypeEnum::class,
+            'type' => \App\Enums\CouponType::class,
             'value' => 'double',
             'max_discount' => 'double',
             'min_order_amount' => 'double',
-            'starts_at' => 'datetime',
-            'expires_at' => 'datetime',
+            'starts_at' => 'datetime:d-m-Y H:i:s',
+            'expires_at' => 'datetime:d-m-Y H:i:s',
             'is_active' => 'boolean',
         ];
     }

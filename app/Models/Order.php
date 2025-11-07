@@ -41,27 +41,6 @@ class Order extends Model
         'cancelled_at',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'subtotal' => 'decimal:2',
-            'discount' => 'decimal:2',
-            'tax' => 'decimal:2',
-            'shipping_cost' => 'decimal:2',
-            'total' => 'decimal:2',
-            'coupon_value' => 'decimal:2',
-            'ordered_at' => 'datetime',
-            'shipped_at' => 'datetime',
-            'delivered_at' => 'datetime',
-            'cancelled_at' => 'datetime',
-        ];
-    }
-
     // Relationships - All verified with correct foreign keys
     public function user(): BelongsTo
     {
@@ -135,5 +114,27 @@ class Order extends Model
             ->whereIn('type', ['refund', 'partial_refund'])
             ->where('status', 'success')
             ->sum('amount');
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'status' => \App\Enums\OrderStatus::class,
+            'subtotal' => 'decimal:2',
+            'discount' => 'decimal:2',
+            'tax' => 'decimal:2',
+            'shipping_cost' => 'decimal:2',
+            'total' => 'decimal:2',
+            'coupon_value' => 'decimal:2',
+            'ordered_at' => 'datetime:d-m-Y H:i:s',
+            'shipped_at' => 'datetime:d-m-Y H:i:s',
+            'delivered_at' => 'datetime:d-m-Y H:i:s',
+            'cancelled_at' => 'datetime:d-m-Y H:i:s',
+        ];
     }
 }

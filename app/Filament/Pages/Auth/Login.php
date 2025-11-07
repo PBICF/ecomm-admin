@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages\Auth;
 
-use App\Enums\RoleEnum;
+use App\Enums\UserRole;
 use Filament\Facades\Filament;
 use Illuminate\Auth\SessionGuard;
 use Filament\Auth\Pages\Login as BaseLogin;
@@ -36,7 +36,7 @@ class Login extends BaseLogin
         /** @var \App\Models\User|null $user */
         $user = $authProvider->retrieveByCredentials($credentials);
 
-        if ($user instanceof \App\Models\User &&  $user->role !== RoleEnum::Admin) {
+        if ($user instanceof \App\Models\User &&  $user->role !== UserRole::ADMIN) {
             throw ValidationException::withMessages([
                 'data.email' => __('filament-panels::auth/pages/login.messages.failed'),
             ]);

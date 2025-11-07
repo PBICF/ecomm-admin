@@ -2,12 +2,11 @@
 
 namespace App\Filament\Resources\Orders\Schemas;
 
-use App\Enums\OrderStatusEnum;
-use App\Enums\PaymentMethodEnum;
-use App\Enums\PaymentStatusEnum;
+use App\Enums\OrderStatus;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 
 class OrderForm
@@ -28,9 +27,10 @@ class OrderForm
                 TextInput::make('order_number')
                     ->required(),
                 TextInput::make('currency')
-                    ->default(null),
+                    ->required()
+                    ->default('INR'),
                 Select::make('status')
-                    ->options(OrderStatusEnum::class)
+                    ->options(OrderStatus::class)
                     ->default('pending')
                     ->required(),
                 TextInput::make('subtotal')
@@ -58,22 +58,21 @@ class OrderForm
                 TextInput::make('coupon_value')
                     ->numeric()
                     ->default(null),
-                Select::make('payment_method')
-                    ->options(PaymentMethodEnum::class)
-                    ->default('cod')
-                    ->required(),
-                Select::make('payment_status')
-                    ->options(PaymentStatusEnum::class)
-                    ->default('pending')
-                    ->required(),
-                TextInput::make('transaction_id')
-                    ->default(null),
                 TextInput::make('tracking_number')
                     ->default(null),
                 TextInput::make('carrier')
                     ->default(null),
+                DateTimePicker::make('shipped_at'),
+                DateTimePicker::make('delivered_at'),
+                Textarea::make('customer_notes')
+                    ->default(null)
+                    ->columnSpanFull(),
+                Textarea::make('admin_notes')
+                    ->default(null)
+                    ->columnSpanFull(),
                 DateTimePicker::make('ordered_at')
                     ->required(),
+                DateTimePicker::make('cancelled_at'),
             ]);
     }
 }

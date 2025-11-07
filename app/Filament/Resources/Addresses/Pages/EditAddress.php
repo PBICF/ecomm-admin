@@ -4,7 +4,8 @@ namespace App\Filament\Resources\Addresses\Pages;
 
 use App\Filament\Resources\Addresses\AddressResource;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\ViewAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditAddress extends EditRecord
@@ -14,8 +15,9 @@ class EditAddress extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            ViewAction::make(),
             DeleteAction::make(),
+            ForceDeleteAction::make(),
+            RestoreAction::make(),
         ];
     }
 }

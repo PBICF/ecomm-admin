@@ -4,14 +4,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-use App\Enums\ProductStatusEnum;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +22,7 @@ class Product extends Model
         'brand_id',
         'name',
         'slug',
+        'type',
         'price',
         'sale_price',
         'cost_price',
@@ -61,6 +61,16 @@ class Product extends Model
             ->withTimestamps();
     }
 
+    public function attributes(): HasMany
+    {
+        return $this->hasMany(ProductAttribute::class);
+    }
+
+    public function specifications(): HasMany
+    {
+        return $this->hasMany(ProductSpecification::class);
+    }
+
     public function isInWishlist(?int $userId): bool
     {
         if (!$userId) {
@@ -78,10 +88,11 @@ class Product extends Model
     protected function casts(): array
     {
         return [
+            'type'        => \App\Enums\ProductType::class,
             'price'       => 'double',
             'sale_price'  => 'double',
             'cost_price'  => 'double',
-            'status'      => ProductStatusEnum::class,
+            'status'      => \App\Enums\ProductStatus::class,
             'is_featured' => 'boolean',
         ];
     }

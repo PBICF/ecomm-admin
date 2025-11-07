@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AddressType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +15,7 @@ return new class extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->enum('type', ['billing', 'shipping'])->default('shipping');
+            $table->enum('type', array_column(AddressType::cases(), 'value'))->default(AddressType::SHIPPING);
             $table->string('name')->nullable();
             $table->string('phone')->nullable();
             $table->string('address_line_1');
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->string('country')->default('IN');
             $table->boolean('is_default')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

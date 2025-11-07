@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'order_id',
         'user_id',
-        'parent_transaction_id',
         'transaction_number',
         'gateway_transaction_id',
         'payment_method',
@@ -25,10 +25,6 @@ class Transaction extends Model
         'gateway_fee',
         'gateway',
         'gateway_response',
-        'card_last_four',
-        'card_brand',
-        'bank_name',
-        'ip_address',
         'notes',
         'failure_reason',
         'attempted_at',
@@ -136,5 +132,22 @@ class Transaction extends Model
         return $this->isPayment() 
             && $this->isSuccessful() 
             && $this->getTotalRefunded() < $this->amount;
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'payment_method' => \App\Enums\PaymentMethod::class,
+            'type' => \App\Enums\TransactionType::class,
+            'status' => \App\Enums\TransactionStatus::class,
+            'gateway' => \App\Enums\PaymentGateway::class,
+            'attempted_at' => 'datetime:d-m-Y H:i:s',
+            'completed_at' => 'datetime:d-m-Y H:i:s',
+        ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CouponType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
 
             // Discount details
-            $table->enum('type', ['fixed', 'percentage'])->default('fixed');
+            $table->enum('type', array_column(CouponType::cases(), 'value'))->default(CouponType::FIXED);
             $table->decimal('value', 10, 2); // amount or percentage
             $table->decimal('max_discount', 10, 2)->nullable(); // for percentage caps
 
@@ -34,6 +35,7 @@ return new class extends Migration
 
             $table->boolean('is_active')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
